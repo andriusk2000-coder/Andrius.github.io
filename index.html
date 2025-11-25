@@ -13,8 +13,9 @@
 
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-            background: #050816;
-            color: #f5f5f5;
+            min-height: 100vh;
+            color: #f9fafb;
+            background: #020617;
         }
 
         .page {
@@ -23,8 +24,20 @@
             flex-direction: column;
         }
 
+        /* HERO fono nuotrauka (NAUJA VERSIJA SU hero.jpgJPG) */
+        .hero-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(to bottom, rgba(15,23,42,0.6), rgba(15,23,42,0.95)),
+                url("hero.jpgJPG");
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
         header {
-            padding: 16px 20px;
+            padding: 14px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -40,12 +53,12 @@
         }
 
         .logo span {
-            color: #4ade80;
+            color: #38bdf8;
         }
 
         .header-tagline {
             font-size: 12px;
-            opacity: 0.7;
+            opacity: 0.8;
         }
 
         main {
@@ -58,7 +71,7 @@
 
         .hero {
             display: grid;
-            gap: 32px;
+            gap: 28px;
             max-width: 1100px;
             width: 100%;
         }
@@ -70,31 +83,14 @@
             }
         }
 
-        .hero-text h1 {
-            font-size: clamp(32px, 5vw, 44px);
-            line-height: 1.1;
-            margin-bottom: 16px;
-        }
-
-        .hero-text h1 span {
-            color: #4ade80;
-        }
-
-        .hero-text p {
-            font-size: 15px;
-            max-width: 520px;
-            line-height: 1.6;
-            opacity: 0.85;
-            margin-bottom: 24px;
-        }
-
         .pill {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             padding: 6px 10px;
             border-radius: 999px;
-            background: rgba(148, 163, 184, 0.18);
+            background: rgba(15,23,42,0.7);
+            border: 1px solid rgba(148,163,184,0.6);
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.12em;
@@ -105,73 +101,102 @@
             width: 8px;
             height: 8px;
             border-radius: 999px;
-            background: #4ade80;
+            background: #22c55e;
+            box-shadow: 0 0 12px rgba(34,197,94,0.9);
+        }
+
+        .hero-text h1 {
+            font-size: clamp(32px, 5vw, 44px);
+            line-height: 1.1;
+            margin-bottom: 16px;
+            text-shadow: 0 16px 40px rgba(15,23,42,0.9);
+        }
+
+        .hero-text h1 span {
+            color: #38bdf8;
+        }
+
+        .hero-text p {
+            font-size: 15px;
+            max-width: 520px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 22px;
+            text-shadow: 0 12px 30px rgba(15,23,42,0.85);
         }
 
         .btn-row {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            border-radius: 999px;
+            padding: 10px 22px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
         }
 
         .btn-primary {
             border: none;
-            border-radius: 999px;
-            padding: 10px 22px;
-            background: linear-gradient(135deg, #4ade80, #22c55e);
+            background: linear-gradient(135deg, #38bdf8, #6366f1);
             color: #020617;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
+            box-shadow: 0 14px 40px rgba(37,99,235,0.7);
         }
 
         .btn-secondary {
-            border-radius: 999px;
-            padding: 9px 20px;
-            border: 1px solid rgba(148, 163, 184, 0.6);
-            background: transparent;
+            border: 1px solid rgba(148,163,184,0.8);
+            background: rgba(15,23,42,0.7);
             color: #e5e7eb;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
         }
 
         .hero-badges {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 18px;
+            margin-top: 12px;
             font-size: 11px;
-            opacity: 0.75;
+            opacity: 0.85;
         }
 
         .badge {
             padding: 4px 10px;
             border-radius: 999px;
-            border: 1px solid rgba(148, 163, 184, 0.35);
+            border: 1px solid rgba(148,163,184,0.6);
+            backdrop-filter: blur(14px);
+            background: rgba(15,23,42,0.65);
         }
 
         .hero-card {
             border-radius: 18px;
             padding: 20px 18px;
-            background: radial-gradient(circle at top left, rgba(74, 222, 128, 0.18), transparent 55%),
-                        radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.2), transparent 55%),
-                        #020617;
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            background: rgba(15,23,42,0.82);
+            border: 1px solid rgba(148,163,184,0.6);
+            box-shadow:
+                0 24px 60px rgba(15,23,42,0.95),
+                0 0 50px rgba(56,189,248,0.25);
         }
 
         .hero-card-title {
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .hero-card-sub {
             font-size: 12px;
-            opacity: 0.8;
-            margin-bottom: 16px;
+            opacity: 0.85;
+            margin-bottom: 14px;
         }
 
         .trip-row {
@@ -182,7 +207,7 @@
         }
 
         .trip-label {
-            opacity: 0.78;
+            opacity: 0.8;
         }
 
         .trip-value {
@@ -190,8 +215,8 @@
         }
 
         .divider {
-            margin: 14px 0;
-            border-bottom: 1px dashed rgba(148, 163, 184, 0.5);
+            margin: 12px 0;
+            border-bottom: 1px dashed rgba(148,163,184,0.7);
         }
 
         .day-budget {
@@ -206,22 +231,34 @@
 
         .footnote {
             font-size: 11px;
-            opacity: 0.75;
+            opacity: 0.78;
+            margin-top: 8px;
         }
 
         footer {
             font-size: 11px;
             text-align: center;
-            padding: 12px 20px 20px;
-            opacity: 0.5;
+            padding: 10px 20px 18px;
+            opacity: 0.65;
+            text-shadow: 0 12px 30px rgba(15,23,42,0.9);
+        }
+
+        @media (max-width: 599px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
         }
     </style>
 </head>
 <body>
 <div class="page">
+    <div class="hero-bg"></div>
+
     <header>
         <div class="logo">Budget<span>Travel</span> AI</div>
-        <div class="header-tagline">Planas kelionei pagal tavo biudžetą</div>
+        <div class="header-tagline">Planuok keliones pagal savo biudžetą</div>
     </header>
 
     <main>
@@ -230,59 +267,62 @@
             <div class="hero-text">
                 <div class="pill">
                     <div class="pill-dot"></div>
-                    Dirbtinis intelektas kelionėms
+                    Išmanus kelionių biudžeto planavimas
                 </div>
                 <h1>
-                    Susiplanuok kelionę<br />
-                    <span>neišleidęs daugiau</span> nei sugalvojai.
+                    Susiplanuok kelionę į bet kurį miestą,<br />
+                    <span>neišleisdamas daugiau, nei gali sau leisti.</span>
                 </h1>
                 <p>
-                    Įvesk miestą, kelionės trukmę ir savo biudžetą – Budget Travel AI
-                    paskaičiuos dienos išlaidas, maisto, transporto ir veiklų kainas
-                    skirtingose šalyse.
+                    Įvesk miestą, dienų skaičių ir savo biudžetą. Budget Travel AI
+                    paskaičiuos, kiek gali išleisti kasdien maistui, transportui ir
+                    veikloms – nuo Vilniaus iki Niujorko.
                 </p>
 
                 <div class="btn-row">
-                    <!-- Šitas mygtukas vėliau ves į formą su įvedimu -->
-                    <a href="budget.html" class="btn-primary">Pradėti kelionės planavimą</a>
-                    <a href="#" class="btn-secondary">Sužinoti, kaip tai veikia</a>
+                    <a href="budget.html" class="btn-primary">
+                        ✈️ Pradėti kelionės planavimą
+                    </a>
+                    <a href="#how-it-works" class="btn-secondary">
+                        ℹ️ Kaip tai veikia
+                    </a>
                 </div>
 
                 <div class="hero-badges">
                     <div class="badge">Biudžetinės kelionės</div>
                     <div class="badge">AI biudžeto skaičiuoklė</div>
-                    <div class="badge">Kelionių idėjos pagal piniginę</div>
+                    <div class="badge">Pritaikyta miestui ir kelionės stiliui</div>
                 </div>
             </div>
 
             <aside class="hero-card">
-                <div class="hero-card-title">Pavyzdinė kelionė</div>
-                <div class="hero-card-sub">Barselona · 7 dienos · 1 000 € biudžetas</div>
+                <div class="hero-card-title">Demo kelionė · Niujorkas</div>
+                <div class="hero-card-sub">7 dienos · 1 500 € biudžetas · Balansuota kelionė</div>
 
                 <div class="trip-row">
                     <div class="trip-label">Bendras biudžetas</div>
-                    <div class="trip-value">1 000 €</div>
+                    <div class="trip-value">1 500 €</div>
                 </div>
                 <div class="trip-row">
                     <div class="trip-label">Dienos biudžetas</div>
-                    <div class="trip-value">~142 € / d.</div>
+                    <div class="trip-value">~214 € / d.</div>
                 </div>
 
                 <div class="divider"></div>
 
                 <div class="day-budget">
-                    Maistas: <span>35–45 €</span> / d.
+                    Maistas: <span>85–95 €</span> / d.
                 </div>
                 <div class="day-budget">
-                    Transportas: <span>10–12 €</span> / d.
+                    Transportas: <span>20–25 €</span> / d.
                 </div>
                 <div class="day-budget">
-                    Veiklos: <span>20–30 €</span> / d.
+                    Veiklos / pramogos: <span>80–100 €</span> / d.
                 </div>
 
                 <p class="footnote">
-                    Šie skaičiai tik orientaciniai. Vėliau AI skaičiuos tiksliai pagal
-                    realias kainas ir tavo kelionės stilių.
+                    Tik demonstraciniai skaičiai. Tavo kelionei programėlė viską
+                    perskaičiuos pagal pasirinktą miestą, biudžetą ir kelionės stilių.
                 </p>
             </aside>
         </section>
@@ -294,7 +334,6 @@
 </div>
 
 <script>
-    // Automatiškai įrašo einamuosius metus į footerį
     document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 </body>
