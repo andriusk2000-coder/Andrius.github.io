@@ -2,15 +2,281 @@
 <html lang="lt">
 <head>
     <meta charset="UTF-8" />
-    <title>Paprasti kelionės rezultatai</title>
+    <title>Kelionės biudžeto rezultatai · Budget Travel AI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-</head>
-<body style="background:#050816; color:white; font-family:system-ui,Arial; padding:20px;">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-<h1>Kelionės biudžeto rezultatai (testinė versija)</h1>
-<div id="content" style="margin-top:20px; font-size:16px;"></div>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
+            color: #f9fafb;
+            background: #020617;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(to bottom, rgba(15,23,42,0.8), rgba(15,23,42,0.97)),
+                url("hero.jpg.JPG");
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        header {
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        .header-link {
+            font-size: 12px;
+        }
+
+        .header-link a {
+            color: #e5e7eb;
+            text-decoration: none;
+            opacity: 0.9;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 16px 40px;
+        }
+
+        .layout {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            gap: 16px;
+        }
+
+        @media (min-width: 860px) {
+            .layout {
+                grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+            }
+        }
+
+        .card {
+            padding: 18px 16px 20px;
+            border-radius: 18px;
+            backdrop-filter: blur(22px);
+            background: rgba(15,23,42,0.9);
+            border: 1px solid rgba(148,163,184,0.6);
+            box-shadow:
+                0 20px 50px rgba(15,23,42,0.95),
+                0 0 32px rgba(56,189,248,0.2);
+        }
+
+        .title {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .label {
+            opacity: 0.85;
+        }
+
+        .value {
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 10px 0 6px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+            font-size: 13px;
+        }
+
+        ul li {
+            margin-bottom: 4px;
+        }
+
+        .note {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        th, td {
+            padding: 6px 5px;
+            text-align: left;
+        }
+
+        th {
+            border-bottom: 1px solid rgba(148,163,184,0.7);
+            opacity: 0.9;
+        }
+
+        tr:nth-child(even) td {
+            background: rgba(15,23,42,0.8);
+        }
+
+        tr:nth-child(odd) td {
+            background: rgba(15,23,42,0.55);
+        }
+
+        button {
+            margin-top: 14px;
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #38bdf8, #6366f1);
+            color: #020617;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        footer {
+            font-size: 11px;
+            text-align: center;
+            padding: 10px 20px 18px;
+            opacity: 0.65;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="hero-bg"></div>
+
+    <header>
+        <div class="logo">Budget<span>Travel</span> AI</div>
+        <div class="header-link">
+            <a href="budget.html">← Grįžti į skaičiuoklę</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="layout">
+            <div class="card" id="summary-card">
+                <div class="title">Kelionės biudžeto rezultatai</div>
+                <div class="subtitle" id="trip-subtitle"></div>
+
+                <div class="row">
+                    <div class="label">Bendras biudžetas</div>
+                    <div class="value" id="total-budget"></div>
+                </div>
+                <div class="row">
+                    <div class="label">Dienų skaičius</div>
+                    <div class="value" id="days"></div>
+                </div>
+                <div class="row">
+                    <div class="label">Tavo dienos biudžetas</div>
+                    <div class="value" id="day-budget"></div>
+                </div>
+
+                <div class="section-title">Miestas ir rekomendacijos</div>
+                <div class="row">
+                    <div class="label">Miesto kainų lygis</div>
+                    <div class="value" id="city-level"></div>
+                </div>
+                <div class="row">
+                    <div class="label">Rekomenduojamas dienos biudžetas</div>
+                    <div class="value" id="city-suggest"></div>
+                </div>
+
+                <p class="note" id="budget-comment"></p>
+                <p class="note" id="style-comment"></p>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Dienos paskirstymas</div>
+                <ul>
+                    <li>Maistas: <span id="food"></span> / d.</li>
+                    <li>Transportas: <span id="transport"></span> / d.</li>
+                    <li>Veiklos / laisvalaikis: <span id="fun"></span> / d.</li>
+                </ul>
+
+                <div class="section-title" style="margin-top:12px;">Dienų biudžeto lentelė</div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Diena</th>
+                        <th>Maistas (€)</th>
+                        <th>Transportas (€)</th>
+                        <th>Veiklos (€)</th>
+                        <th>Iš viso (€)</th>
+                    </tr>
+                    </thead>
+                    <tbody id="days-table-body"></tbody>
+                </table>
+
+                <button onclick="window.location.href='budget.html'">
+                    Susiplanuoti kitą kelionę
+                </button>
+
+                <p class="note">
+                    Skaičiavimai yra orientaciniai. Vėliau jie gali būti patikslinti su realiais
+                    duomenimis (pvz., restoranų, viešojo transporto ir veiklų kainomis).
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        © <span id="year"></span> Budget Travel AI
+    </footer>
+</div>
 
 <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
     const params = new URLSearchParams(window.location.search);
 
     const cityRaw = (params.get("city") || "").trim();
@@ -18,57 +284,52 @@
     const budget = Number(params.get("budget") || 0);
     const style = params.get("style") || "balanced";
 
-    const container = document.getElementById("content");
     const fmt = (num) => num.toFixed(2).replace(".", ",");
 
     if (!cityRaw || !Number.isFinite(days) || !Number.isFinite(budget) || days <= 0 || budget <= 0) {
-        container.innerHTML = "<p>Neteisingi duomenys. Grįžk atgal ir įvesk biudžetą dar kartą.</p>";
+        document.getElementById("summary-card").innerHTML =
+            "<div class='title'>Klaida</div><p class='subtitle'>Neteisingi duomenys. Grįžk atgal ir įvesk informaciją dar kartą.</p>";
     } else {
         const city = cityRaw;
         const cityKey = cityRaw.toLowerCase();
-
         const dayBudget = budget / days;
 
-        // --- Miestų "profiliai": čia įdedam kainų lygį ---
+        // miestų profiliai
         const cityProfiles = {
-            "vilnius":   { label: "pigesnis miestas",        baseDay: 60 },
-            "kaunas":    { label: "pigesnis miestas",        baseDay: 55 },
-            "riga":      { label: "pigesnis miestas",        baseDay: 60 },
-            "ryga":      { label: "pigesnis miestas",        baseDay: 60 },
-            "barcelona": { label: "vidutinio brangumo miestas", baseDay: 85 },
-            "barceloną": { label: "vidutinio brangumo miestas", baseDay: 85 },
-            "london":    { label: "brangus miestas",         baseDay: 110 },
-            "londonas":  { label: "brangus miestas",         baseDay: 110 },
-            "paris":     { label: "brangus miestas",         baseDay: 105 },
-            "paryžius":  { label: "brangus miestas",         baseDay: 105 },
-            "paryzius":  { label: "brangus miestas",         baseDay: 105 }
+            "vilnius":   { label: "pigesnis miestas",             baseDay: 60 },
+            "kaunas":    { label: "pigesnis miestas",             baseDay: 55 },
+            "riga":      { label: "pigesnis miestas",             baseDay: 60 },
+            "ryga":      { label: "pigesnis miestas",             baseDay: 60 },
+            "barcelona": { label: "vidutinio brangumo miestas",   baseDay: 85 },
+            "barceloną": { label: "vidutinio brangumo miestas",   baseDay: 85 },
+            "barcelona, spain": { label: "vidutinio brangumo miestas", baseDay: 85 },
+            "london":    { label: "brangus miestas",              baseDay: 110 },
+            "londonas":  { label: "brangus miestas",              baseDay: 110 },
+            "paris":     { label: "brangus miestas",              baseDay: 105 },
+            "paryžius":  { label: "brangus miestas",              baseDay: 105 },
+            "paryzius":  { label: "brangus miestas",              baseDay: 105 }
         };
 
-        // jei miesto nėra sąraše – laikom vidutinio brangumo
         const defaultProfile = { label: "vidutinio brangumo miestas", baseDay: 80 };
         const profile = cityProfiles[cityKey] || defaultProfile;
 
-        // --- Kelionės stilius: įtakoja rekomenduojamą dienos biudžetą ---
         let styleText;
         let styleComment;
-
-        let recommendedDay = profile.baseDay; // bazė pagal miestą
+        let recommendedDay = profile.baseDay;
 
         if (style === "budget") {
             styleText = "Pigiai (taupus stilius)";
             styleComment = "Pasirinktas taupus kelionės stilius – daugiau dėmesio biudžetui ir mažiau brangių veiklų.";
-            recommendedDay *= 0.9; // taupiam šiek tiek mažesnė rekomendacija
+            recommendedDay *= 0.9;
         } else if (style === "comfort") {
             styleText = "Komfortiškai";
-            styleComment = "Pasirinktas komfortiškas stilius – daugiau lėšų maistui ir patogesnėms veikloms.";
-            recommendedDay *= 1.15; // komfortui – didesnė rekomendacija
+            styleComment = "Pasirinktas komfortiškas kelionės stilius – daugiau lėšų maistui ir patogesnėms veikloms.";
+            recommendedDay *= 1.15;
         } else {
             styleText = "Balansuota kelionė";
             styleComment = "Balansuotas kelionės stilius – derinamas taupymas ir patogumas.";
-            // rekomendacija = bazė
         }
 
-        // paskirstymo procentai (galima koreguoti vėliau)
         const foodPct = 0.45;
         const transportPct = 0.15;
         const funPct = 0.40;
@@ -76,40 +337,50 @@
         const food = dayBudget * foodPct;
         const transport = dayBudget * transportPct;
         const fun = dayBudget * funPct;
-        const totalDay = food + transport + fun;
 
-        // palyginam tavo dienos biudžetą su rekomendacija
         const ratio = dayBudget / recommendedDay;
         let budgetComment;
         if (ratio < 0.8) {
-            budgetComment = "Tavo biudžetas šiam miestui yra gana taupus – reikės labiau planuoti maistą ir veiklas.";
+            budgetComment = "Tavo biudžetas šiam miestui yra gana taupus – reikės atidžiau planuoti maistą ir veiklas.";
         } else if (ratio <= 1.2) {
             budgetComment = "Tavo biudžetas šiam miestui atrodo subalansuotas – galėsi keliauti gana patogiai.";
         } else {
             budgetComment = "Tavo biudžetas šiam miestui gana komfortiškas – galėsi sau leisti daugiau veiklų ir geresnį maistą.";
         }
 
-        container.innerHTML = `
-            <p><strong>Miestas:</strong> ${city} (${profile.label})</p>
-            <p><strong>Dienų skaičius:</strong> ${days}</p>
-            <p><strong>Bendras biudžetas:</strong> ${fmt(budget)} €</p>
-            <p><strong>Tavo dienos biudžetas:</strong> ${fmt(dayBudget)} €</p>
-            <p><strong>Rekomenduojamas dienos biudžetas šiame mieste (${styleText.toLowerCase()}):</strong> ${fmt(recommendedDay)} €</p>
-            <p>${budgetComment}</p>
-            <hr style="margin:20px 0;" />
-            <p><strong>Dienos paskirstymas:</strong></p>
-            <ul>
-                <li>Maistas: ${fmt(food)} €</li>
-                <li>Transportas: ${fmt(transport)} €</li>
-                <li>Veiklos: ${fmt(fun)} €</li>
-                <li>Iš viso per dieną: ${fmt(totalDay)} €</li>
-            </ul>
-            <hr style="margin:20px 0;" />
-            <p>${styleComment}</p>
-        `;
+        // užpildom tekstus
+        document.getElementById("trip-subtitle").textContent =
+            `${city} · ${days} d. · biudžetas ${fmt(budget)} € · ${styleText}`;
+        document.getElementById("total-budget").textContent = fmt(budget) + " €";
+        document.getElementById("days").textContent = days + " d.";
+        document.getElementById("day-budget").textContent = fmt(dayBudget) + " € / d.";
+
+        document.getElementById("city-level").textContent = profile.label;
+        document.getElementById("city-suggest").textContent = fmt(recommendedDay) + " € / d.";
+
+        document.getElementById("food").textContent = fmt(food) + " €";
+        document.getElementById("transport").textContent = fmt(transport) + " €";
+        document.getElementById("fun").textContent = fmt(fun) + " €";
+
+        document.getElementById("budget-comment").textContent = budgetComment;
+        document.getElementById("style-comment").textContent = styleComment;
+
+        // lentelė
+        const tbody = document.getElementById("days-table-body");
+        tbody.innerHTML = "";
+        for (let i = 1; i <= days; i++) {
+            const totalDay = food + transport + fun;
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${i}</td>
+                <td>${fmt(food)}</td>
+                <td>${fmt(transport)}</td>
+                <td>${fmt(fun)}</td>
+                <td>${fmt(totalDay)}</td>
+            `;
+            tbody.appendChild(tr);
+        }
     }
 </script>
-
-
 </body>
 </html>
