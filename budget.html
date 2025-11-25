@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8" />
+    <title>Kelionės biudžeto skaičiuoklė</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body {
+            background: #050816;
+            color: white;
+            font-family: system-ui, Arial;
+            padding: 40px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: #4ade80;
+            color: black;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Kelionės biudžeto skaičiuoklė</h1>
+
+<form action="results.html" method="GET">
+    <label>Miestas</label>
+    <input type="text" name="city" placeholder="pvz. Barcelona" required>
+
+    <label>Kiek dienų?</label>
+    <input type="number" name="days" placeholder="pvz. 7" required>
+
+    <label>Bendras biudžetas (€)</label>
+    <input type="number" name="budget" placeholder="pvz. 1000" required>
+
+    <button type="submit">Skaičiuoti</button>
+</form>
+
+</body>
+</html>
