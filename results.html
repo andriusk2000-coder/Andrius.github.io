@@ -11,44 +11,91 @@
 <div id="content" style="margin-top:20px; font-size:16px;"></div>
 
 <script>
-    // Paimam parametrus iš URL
     const params = new URLSearchParams(window.location.search);
 
-    const city = (params.get("city") || "").trim();
-    const days = parseInt(params.get("days") || "0", 10);
-    const budget = parseFloat(params.get("budget") || "0");
+    const cityRaw = (params.get("city") || "").trim();
+    const days = Number(params.get("days") || 0);
+    const budget = Number(params.get("budget") || 0);
     const style = params.get("style") || "balanced";
 
     const container = document.getElementById("content");
-
-    // pagalbinė funkcija formatavimui
     const fmt = (num) => num.toFixed(2).replace(".", ",");
 
-    if (!city || !days || !budget || days <= 0 || budget <= 0) {
+    if (!cityRaw || !Number.isFinite(days) || !Number.isFinite(budget) || days <= 0 || budget <= 0) {
         container.innerHTML = "<p>Neteisingi duomenys. Grįžk atgal ir įvesk biudžetą dar kartą.</p>";
     } else {
+        const city = cityRaw;
+        const cityKey = cityRaw.toLowerCase();
+
         const dayBudget = budget / days;
 
+        // --- Miestų "profiliai": čia įdedam kainų lygį ---
+        const cityProfiles = {
+            "vilnius":   { label: "pigesnis miestas",        baseDay: 60 },
+            "kaunas":    { label: "pigesnis miestas",        baseDay: 55 },
+            "riga":      { label: "pigesnis miestas",        baseDay: 60 },
+            "ryga":      { label: "pigesnis miestas",        baseDay: 60 },
+            "barcelona": { label: "vidutinio brangumo miestas", baseDay: 85 },
+            "barceloną": { label: "vidutinio brangumo miestas", baseDay: 85 },
+            "london":    { label: "brangus miestas",         baseDay: 110 },
+            "londonas":  { label: "brangus miestas",         baseDay: 110 },
+            "paris":     { label: "brangus miestas",         baseDay: 105 },
+            "paryžius":  { label: "brangus miestas",         baseDay: 105 },
+            "paryzius":  { label: "brangus miestas",         baseDay: 105 }
+        };
+
+        // jei miesto nėra sąraše – laikom vidutinio brangumo
+        const defaultProfile = { label: "vidutinio brangumo miestas", baseDay: 80 };
+        const profile = cityProfiles[cityKey] || defaultProfile;
+
+        // --- Kelionės stilius: įtakoja rekomenduojamą dienos biudžetą ---
         let styleText;
+        let styleComment;
+
+        let recommendedDay = profile.baseDay; // bazė pagal miestą
+
         if (style === "budget") {
             styleText = "Pigiai (taupus stilius)";
+            styleComment = "Pasirinktas taupus kelionės stilius – daugiau dėmesio biudžetui ir mažiau brangių veiklų.";
+            recommendedDay *= 0.9; // taupiam šiek tiek mažesnė rekomendacija
         } else if (style === "comfort") {
             styleText = "Komfortiškai";
+            styleComment = "Pasirinktas komfortiškas stilius – daugiau lėšų maistui ir patogesnėms veikloms.";
+            recommendedDay *= 1.15; // komfortui – didesnė rekomendacija
         } else {
             styleText = "Balansuota kelionė";
+            styleComment = "Balansuotas kelionės stilius – derinamas taupymas ir patogumas.";
+            // rekomendacija = bazė
         }
 
-        const food = dayBudget * 0.45;
-        const transport = dayBudget * 0.15;
-        const fun = dayBudget * 0.40;
+        // paskirstymo procentai (galima koreguoti vėliau)
+        const foodPct = 0.45;
+        const transportPct = 0.15;
+        const funPct = 0.40;
+
+        const food = dayBudget * foodPct;
+        const transport = dayBudget * transportPct;
+        const fun = dayBudget * funPct;
         const totalDay = food + transport + fun;
 
+        // palyginam tavo dienos biudžetą su rekomendacija
+        const ratio = dayBudget / recommendedDay;
+        let budgetComment;
+        if (ratio < 0.8) {
+            budgetComment = "Tavo biudžetas šiam miestui yra gana taupus – reikės labiau planuoti maistą ir veiklas.";
+        } else if (ratio <= 1.2) {
+            budgetComment = "Tavo biudžetas šiam miestui atrodo subalansuotas – galėsi keliauti gana patogiai.";
+        } else {
+            budgetComment = "Tavo biudžetas šiam miestui gana komfortiškas – galėsi sau leisti daugiau veiklų ir geresnį maistą.";
+        }
+
         container.innerHTML = `
-            <p><strong>Miestas:</strong> ${city}</p>
+            <p><strong>Miestas:</strong> ${city} (${profile.label})</p>
             <p><strong>Dienų skaičius:</strong> ${days}</p>
             <p><strong>Bendras biudžetas:</strong> ${fmt(budget)} €</p>
-            <p><strong>Dienos biudžetas:</strong> ${fmt(dayBudget)} €</p>
-            <p><strong>Kelionės stilius:</strong> ${styleText}</p>
+            <p><strong>Tavo dienos biudžetas:</strong> ${fmt(dayBudget)} €</p>
+            <p><strong>Rekomenduojamas dienos biudžetas šiame mieste (${styleText.toLowerCase()}):</strong> ${fmt(recommendedDay)} €</p>
+            <p>${budgetComment}</p>
             <hr style="margin:20px 0;" />
             <p><strong>Dienos paskirstymas:</strong></p>
             <ul>
@@ -57,9 +104,12 @@
                 <li>Veiklos: ${fmt(fun)} €</li>
                 <li>Iš viso per dieną: ${fmt(totalDay)} €</li>
             </ul>
+            <hr style="margin:20px 0;" />
+            <p>${styleComment}</p>
         `;
     }
 </script>
+
 
 </body>
 </html>
