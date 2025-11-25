@@ -2,195 +2,64 @@
 <html lang="lt">
 <head>
     <meta charset="UTF-8" />
-    <title>Kelionės biudžeto rezultatai</title>
+    <title>Paprasti kelionės rezultatai</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-        body {
-            background: #050816;
-            color: #f9fafb;
-            font-family: system-ui, Arial;
-            padding: 32px 20px 40px;
-        }
-
-        .wrap {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        a {
-            color: #4ade80;
-            text-decoration: none;
-        }
-
-        .back {
-            font-size: 13px;
-            margin-bottom: 16px;
-            display: inline-block;
-            opacity: 0.8;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 6px;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            margin-top: 14px;
-            padding: 18px 16px;
-            border-radius: 12px;
-            background: #020617;
-            border: 1px solid rgba(148, 163, 184, 0.5);
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-
-        .label {
-            opacity: 0.8;
-        }
-
-        .value {
-            font-weight: 600;
-        }
-
-        .section-title {
-            margin-top: 4px;
-            margin-bottom: 8px;
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        ul {
-            list-style: none;
-            padding-left: 0;
-            font-size: 14px;
-        }
-
-        ul li {
-            margin-bottom: 4px;
-        }
-
-        .note {
-            margin-top: 10px;
-            font-size: 12px;
-            opacity: 0.75;
-        }
-
-        button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            background: #4ade80;
-            color: #020617;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 13px;
-        }
-
-        th, td {
-            padding: 8px 6px;
-            text-align: left;
-        }
-
-        th {
-            border-bottom: 1px solid rgba(148, 163, 184, 0.6);
-            opacity: 0.9;
-        }
-
-        tr:nth-child(even) td {
-            background: rgba(15, 23, 42, 0.7);
-        }
-
-        tr:nth-child(odd) td {
-            background: rgba(15, 23, 42, 0.4);
-        }
-    </style>
 </head>
-<body>
-<div class="wrap">
+<body style="background:#050816; color:white; font-family:system-ui,Arial; padding:20px;">
 
-    <a class="back" href="budget.html">← Grįžti į skaičiuoklę</a>
-
-    <h1>Tavo kelionės biudžeto rezultatai</h1>
-    <p class="subtitle" id="trip-subtitle"></p>
-
-    <div class="card">
-        <div class="row">
-            <div class="label">Bendras biudžetas</div>
-            <div class="value" id="total-budget"></div>
-        </div>
-        <div class="row">
-            <div class="label">Dienų skaičius</div>
-            <div class="value" id="days"></div>
-        </div>
-        <div class="row">
-            <div class="label">Dienos biudžetas</div>
-            <div class="value" id="day-budget"></div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="section-title">Rekomenduojamas dienos paskirstymas</div>
-        <ul>
-            <li>Maistas: <span id="food"></span> / d.</li>
-            <li>Transportas: <span id="transport"></span> / d.</li>
-            <li>Veiklos / laisvalaikis: <span id="fun"></span> / d.</li>
-        </ul>
-
-        <p class="note" id="style-comment"></p>
-        <p class="note">
-            Tai tik bazinis modelis. Vėliau galėsime prijungti dirbtinį intelektą,
-            kad skaičiuotų pagal realias miesto kainas ir tavo kelionės stilių.
-        </p>
-    </div>
-
-    <div class="card">
-        <div class="section-title">Dienų biudžeto lentelė</div>
-        <table>
-            <thead>
-            <tr>
-                <th>Diena</th>
-                <th>Maistas (€)</th>
-                <th>Transportas (€)</th>
-                <th>Veiklos (€)</th>
-                <th>Iš viso (€)</th>
-            </tr>
-            </thead>
-            <tbody id="days-table-body">
-            <!-- eilutės bus sukurtos per JavaScript -->
-            </tbody>
-        </table>
-    </div>
-
-    <button onclick="window.location.href='budget.html'">
-        Susiplanuoti kitą kelionę
-    </button>
-
-</div>
+<h1>Kelionės biudžeto rezultatai (testinė versija)</h1>
+<div id="content" style="margin-top:20px; font-size:16px;"></div>
 
 <script>
+    // Paimam parametrus iš URL
     const params = new URLSearchParams(window.location.search);
 
-    const city = (params.get("city") || "nežinomas miestas").trim();
-    const days = Number(params.get("days") || 0);
-    const budget = Number(params.get("budget") || 0);
-    const style = params.get("style"
+    const city = (params.get("city") || "").trim();
+    const days = parseInt(params.get("days") || "0", 10);
+    const budget = parseFloat(params.get("budget") || "0");
+    const style = params.get("style") || "balanced";
+
+    const container = document.getElementById("content");
+
+    // pagalbinė funkcija formatavimui
+    const fmt = (num) => num.toFixed(2).replace(".", ",");
+
+    if (!city || !days || !budget || days <= 0 || budget <= 0) {
+        container.innerHTML = "<p>Neteisingi duomenys. Grįžk atgal ir įvesk biudžetą dar kartą.</p>";
+    } else {
+        const dayBudget = budget / days;
+
+        let styleText;
+        if (style === "budget") {
+            styleText = "Pigiai (taupus stilius)";
+        } else if (style === "comfort") {
+            styleText = "Komfortiškai";
+        } else {
+            styleText = "Balansuota kelionė";
+        }
+
+        const food = dayBudget * 0.45;
+        const transport = dayBudget * 0.15;
+        const fun = dayBudget * 0.40;
+        const totalDay = food + transport + fun;
+
+        container.innerHTML = `
+            <p><strong>Miestas:</strong> ${city}</p>
+            <p><strong>Dienų skaičius:</strong> ${days}</p>
+            <p><strong>Bendras biudžetas:</strong> ${fmt(budget)} €</p>
+            <p><strong>Dienos biudžetas:</strong> ${fmt(dayBudget)} €</p>
+            <p><strong>Kelionės stilius:</strong> ${styleText}</p>
+            <hr style="margin:20px 0;" />
+            <p><strong>Dienos paskirstymas:</strong></p>
+            <ul>
+                <li>Maistas: ${fmt(food)} €</li>
+                <li>Transportas: ${fmt(transport)} €</li>
+                <li>Veiklos: ${fmt(fun)} €</li>
+                <li>Iš viso per dieną: ${fmt(totalDay)} €</li>
+            </ul>
+        `;
+    }
+</script>
+
+</body>
+</html>
